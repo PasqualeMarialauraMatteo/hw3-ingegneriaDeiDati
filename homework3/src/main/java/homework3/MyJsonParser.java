@@ -47,8 +47,8 @@ public class MyJsonParser {
 		Path path = Paths.get("C:\\Users\\paleo\\git\\hw3-ingegneriaDeiDati\\homework3\\index");
 		Directory directory = FSDirectory.open(path);
 		IndexWriterConfig config = new IndexWriterConfig(analyzer);
-		IndexWriter writer = new IndexWriter(directory, config);
 		config.setCodec(new SimpleTextCodec());
+		IndexWriter writer = new IndexWriter(directory, config);
 		writer.deleteAll();
 
 		long startTime = System.currentTimeMillis();
@@ -61,7 +61,7 @@ public class MyJsonParser {
 
 			JsonElement jsonTree = JsonParser.parseString(line);
 			JsonObject table = jsonTree.getAsJsonObject();
-
+			//creo un documento per ogni tabella
 			Document doc = new Document();
 			
 			//mappa dove memorizzo le celle per colonna
@@ -69,7 +69,6 @@ public class MyJsonParser {
 
 			JsonArray cells = table.getAsJsonArray("cells");
 			int cellsNumber = cells.size();
-//			String oldcell = null;
 			for (int j = 0; j < cellsNumber; j++) {
 
 				JsonObject jsonobject = cells.get(j).getAsJsonObject();
@@ -78,29 +77,29 @@ public class MyJsonParser {
 					JsonObject coordinates = jsonobject.get("Coordinates").getAsJsonObject();
 					String column = coordinates.get("column").getAsString();
 					String cell = jsonobject.get("cleanedText").getAsString();
-					if (!cell.equals("")/*&& !cell.equals(oldcell)*/) {
+					if (!cell.equals("")) {
 						if(colonnaToCella.containsKey(column)) {
-							colonnaToCella.put(column, colonnaToCella.get(column) + " " + cell);
+							//la ⁓ separa le varie celle nel documento
+							colonnaToCella.put(column, colonnaToCella.get(column) + "⁓" + cell);
 						}
 						else {
 							colonnaToCella.put(column, cell);
 						}
 					}
-					//oldcell = cell; 
 				}
 			}
 			
 			if(!colonnaToCella.isEmpty()) {
 				for(String col : colonnaToCella.keySet()) {
-					doc.add(new TextField("tabella_colonna", Integer.toString(tableNumber)+"_"+col, Field.Store.YES));
-					doc.add(new TextField("contenuto",colonnaToCella.get(col), Field.Store.YES));
-					if(tableNumber == 0)
-						System.out.println(doc);
-					writer.commit();
+					doc.add(new TextField("tabella_colonna", Integer.toString(tableNumber)+ "_" + col, Field.Store.YES));
+					doc.add(new TextField("contenuto",colonnaToCella.get(col), Field.Store.YES));	
 				}
+				writer.addDocument(doc);
+				System.out.println("Documento aggiunto #: " + tableNumber);
 			}
 						
 		}
+		writer.commit();
 		writer.close();
 		long endTime = System.currentTimeMillis();
 		System.out.println("Tempo di indicizzazione: " + (endTime-startTime)/1000 + " secondi" );
