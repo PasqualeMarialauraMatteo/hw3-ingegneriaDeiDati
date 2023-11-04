@@ -1,6 +1,9 @@
-*/.idea/
-*/.settings/
-*/target/
-*/index/
+**/.idea/
+**/.settings/
+**/target/
+**/index/
 
 *.json
+
+*/.classpath
+*/.project
