@@ -26,6 +26,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import static homework3.utils.Constants.*;
+
 
 public class MyJsonParser {
 
@@ -41,10 +43,10 @@ public class MyJsonParser {
 
 		//definizione analyzer
 		Map<String, Analyzer> perFieldAnalyzers = new HashMap<>();
-		perFieldAnalyzers.put("tabella_colonna", new StandardAnalyzer());
-		perFieldAnalyzers.put("contenuto", new StandardAnalyzer());
+		perFieldAnalyzers.put(COLUMN_TABLE, new StandardAnalyzer());
+		perFieldAnalyzers.put(CONTENT, new StandardAnalyzer());
 		Analyzer analyzer = new PerFieldAnalyzerWrapper(new EnglishAnalyzer(),perFieldAnalyzers);
-		Path path = Paths.get("C:\\Users\\paleo\\git\\hw3-ingegneriaDeiDati\\homework3\\index");
+		Path path = Paths.get(INDEX_PATH);
 		Directory directory = FSDirectory.open(path);
 		IndexWriterConfig config = new IndexWriterConfig(analyzer);
 		config.setCodec(new SimpleTextCodec());
@@ -91,8 +93,8 @@ public class MyJsonParser {
 			
 			if(!colonnaToCella.isEmpty()) {
 				for(String col : colonnaToCella.keySet()) {
-					doc.add(new TextField("tabella_colonna", Integer.toString(tableNumber)+ "_" + col, Field.Store.YES));
-					doc.add(new TextField("contenuto",colonnaToCella.get(col), Field.Store.YES));	
+					doc.add(new TextField(COLUMN_TABLE, Integer.toString(tableNumber)+ "_" + col, Field.Store.YES));
+					doc.add(new TextField(CONTENT,colonnaToCella.get(col), Field.Store.YES));
 				}
 				writer.addDocument(doc);
 				System.out.println("Documento aggiunto #: " + tableNumber);
