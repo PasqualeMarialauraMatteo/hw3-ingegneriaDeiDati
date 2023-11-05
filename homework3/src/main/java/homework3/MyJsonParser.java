@@ -80,7 +80,7 @@ public class MyJsonParser {
 					String cell = jsonobject.get("cleanedText").getAsString();
 					if (!cell.equals("")) {
 						if(colonnaToCella.containsKey(column)) {
-							//la ⁓ separa le varie celle nel documento
+							//lo spazio separa le varie celle nel documento
 							colonnaToCella.put(column, colonnaToCella.get(column) + " " + cell);
 						}
 						else {
