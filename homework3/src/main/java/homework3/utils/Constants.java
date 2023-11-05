@@ -6,6 +6,6 @@ public class Constants {
     public static final String INDEX_PATH = "target/index";
 
     public static final String COLUMN_TABLE = "tabella_colonna";
-    public static final String CONTENT = "tabella_colonna";
+    public static final String CONTENT = "contenuto";
 
 }
