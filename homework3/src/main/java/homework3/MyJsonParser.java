@@ -43,7 +43,8 @@ public class MyJsonParser {
 
 		//definizione analyzer
 		Map<String, Analyzer> perFieldAnalyzers = new HashMap<>();
-		perFieldAnalyzers.put(COLUMN_TABLE, new StandardAnalyzer());
+		perFieldAnalyzers.put(TABLE, new StandardAnalyzer());
+		perFieldAnalyzers.put(TABLE_COLUMN, new StandardAnalyzer());
 		perFieldAnalyzers.put(CONTENT, new StandardAnalyzer());
 		Analyzer analyzer = new PerFieldAnalyzerWrapper(new EnglishAnalyzer(),perFieldAnalyzers);
 		Path path = Paths.get(INDEX_PATH);
@@ -63,8 +64,6 @@ public class MyJsonParser {
 
 			JsonElement jsonTree = JsonParser.parseString(line);
 			JsonObject table = jsonTree.getAsJsonObject();
-			//creo un documento per ogni tabella
-			Document doc = new Document();
 			
 			//mappa dove memorizzo le celle per colonna
 			Map<String, String> colonnaToCella = new HashMap<>();
@@ -82,7 +81,7 @@ public class MyJsonParser {
 					if (!cell.equals("")) {
 						if(colonnaToCella.containsKey(column)) {
 							//la ⁓ separa le varie celle nel documento
-							colonnaToCella.put(column, colonnaToCella.get(column) + "⁓" + cell);
+							colonnaToCella.put(column, colonnaToCella.get(column) + " " + cell);
 						}
 						else {
 							colonnaToCella.put(column, cell);
@@ -93,11 +92,15 @@ public class MyJsonParser {
 			
 			if(!colonnaToCella.isEmpty()) {
 				for(String col : colonnaToCella.keySet()) {
-					doc.add(new TextField(COLUMN_TABLE, Integer.toString(tableNumber)+ "_" + col, Field.Store.YES));
+					//creo un documento per ogni clonna 
+					Document doc = new Document();
+					doc.add(new TextField(TABLE, Integer.toString(tableNumber), Field.Store.YES));
+					doc.add(new TextField(TABLE_COLUMN, Integer.toString(tableNumber)+"_"+col, Field.Store.YES));
 					doc.add(new TextField(CONTENT,colonnaToCella.get(col), Field.Store.YES));
+					writer.addDocument(doc);
+					
 				}
-				writer.addDocument(doc);
-				System.out.println("Documento aggiunto #: " + tableNumber);
+				System.out.println("Tabella aggiunto #: " + tableNumber);
 			}
 						
 		}
