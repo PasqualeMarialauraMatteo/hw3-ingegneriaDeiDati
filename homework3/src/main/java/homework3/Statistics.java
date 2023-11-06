@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -104,9 +105,7 @@ public class Statistics {
 			JsonArray cells = table.getAsJsonArray("cells");
 			int cellsNumber = cells.size();
 			//mappa dove memorizzo le celle distinte in una lista per colonna
-			Map<String, List<String>> colonnaToCella = new HashMap<>();
-			//mappa dove memorizzo il numero di valori distinti per colonna della tabella che sto visionando al momento
-			HashMap<Integer, String> localDistValuesToColumns = new HashMap<Integer, String>();
+			Map<String, HashSet<String>> colonnaToCella = new HashMap<>();
 			for (int j = 0; j < cellsNumber; j++) {
 
 				JsonObject jsonobject = cells.get(j).getAsJsonObject();
@@ -118,21 +117,16 @@ public class Statistics {
 					String column = coordinates.get("column").getAsString();
 					String cell = jsonobject.get("cleanedText").getAsString();
 					if(colonnaToCella.containsKey(column)) {
-						List<String> updatedList = colonnaToCella.get(column);
-						if(!updatedList.contains(cell)) {
-							updatedList.add(cell);
-							colonnaToCella.put(column, updatedList);
-						}
+						colonnaToCella.get(column).add(cell);
 					}
 					else {
-						colonnaToCella.put(column, new LinkedList<String>());
+						colonnaToCella.put(column, new HashSet<String>());
 					}
-					localDistValuesToColumns.put(colonnaToCella.get(column).size(), column);
 				}
 
 			}
-			for(int distvals : localDistValuesToColumns.keySet()) {
-				this.distValuesToColumns.put(distvals, this.distValuesToColumns.getOrDefault(distvals, 0) + 1);
+			for(String col : colonnaToCella.keySet()) {
+				this.distValuesToColumns.put(colonnaToCella.get(col).size(), this.distValuesToColumns.getOrDefault(colonnaToCella.get(col).size(), 0) + 1);
 			}
  
 		}
