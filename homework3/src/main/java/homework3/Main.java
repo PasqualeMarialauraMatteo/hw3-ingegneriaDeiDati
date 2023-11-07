@@ -1,13 +1,20 @@
 package homework3;
 
-import static homework3.utils.Constants.DATASET_PATH;
-
-import java.io.FileOutputStream;
+import homework3.table.TableJoin;
 import java.io.IOException;
-import java.io.PrintStream;
+
+import static homework3.utils.Utils.printTable;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
+		TableJoin tableJoin = new TableJoin(false);
+
+		String[][] result = tableJoin.joinTables(0, 1);
+		if (result != null) {
+			printTable(result);
+		}
+
+		/*
 		//indicizzazione
 //		MyJsonParser mjp = new MyJsonParser(DATASET_PATH);
 //		mjp.index();
@@ -19,7 +26,7 @@ public class Main {
 //			Integer valore = entry.getValue();
 //			System.out.println(chiave + ": " + valore);
 //		}
-		
+
 		//Calcolo statistiche
 		try {
             // Specifica il nome del file di destinazione
@@ -33,18 +40,18 @@ public class Main {
             PrintStream originalOut = System.out;
             // Imposta System.out per utilizzare il PrintStream per l'output
             System.setOut(printStream);
-            
+
             // Ora tutto ciò che viene stampato con System.out verrà ridirezionato nel file "output.txt"
     		Statistics statisticCalculator = new Statistics(DATASET_PATH);
     		statisticCalculator.calculateStatistics();
     		statisticCalculator.printStatistics();
-    		
+
             // Ripristina l'output originale (la console)
             System.setOut(originalOut);
             System.out.println("CALCOLO TERMINATO.");
         } catch (Exception e) {
             e.printStackTrace();
         }
-		
+		 */
 	}
 }

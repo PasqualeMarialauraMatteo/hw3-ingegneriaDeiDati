@@ -8,12 +8,14 @@ import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Utils {
 
@@ -50,7 +52,7 @@ public class Utils {
         // Find empty rows
         List<Integer> emptyRows = new ArrayList<>();
         for (int i = 0; i < parsedTable.length; i++) {
-            if (Arrays.stream(parsedTable[i]).allMatch(Objects::isNull)) {
+            if (Arrays.stream(parsedTable[i]).allMatch(Utils::valueEmpty)) {
                 emptyRows.add(i);
             }
         }
@@ -136,4 +138,31 @@ public class Utils {
         }
         System.out.println();
     }
+
+    public static String findTable(String datasetPath, int tableId) throws IOException {
+        FileReader fileReader = new FileReader(datasetPath);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+        String line = null;
+        int i = 0;
+        while((line = bufferedReader.readLine()) != null) {
+            if (i == tableId) {
+                return line;
+            }
+            i++;
+        }
+
+        return null;
+    }
+
+    public static String[] getColumn(String line, int colId) {
+        String[][] table = parseTable(line);
+        String[] column = new String[table.length];
+        for (int i = 0; i < table.length; i++) {
+            column[i] = table[i][colId];
+        }
+
+        return column;
+    }
+
 }
