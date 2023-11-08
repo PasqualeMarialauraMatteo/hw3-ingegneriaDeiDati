@@ -32,14 +32,12 @@ public class TableJoin {
                 int matchTableId = Integer.parseInt(keys[0]);
                 int matchColumnId = Integer.parseInt(keys[1]);
 
-                // For testing
-                if (matchTableId != tableId || true) {
-                    return mergeTables(
-                            table,
-                            findTable(DATASET_PATH, matchTableId),
-                            colId,
-                            matchColumnId
-                    );
+                if (matchTableId != tableId) {
+                    String[][] result = mergeTables(table, findTable(DATASET_PATH, matchTableId), colId, matchColumnId);
+
+                    if (result != null) {
+                        return result;
+                    }
                 }
             }
         }

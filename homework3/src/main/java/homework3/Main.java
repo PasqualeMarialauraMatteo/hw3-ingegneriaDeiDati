@@ -9,7 +9,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		TableJoin tableJoin = new TableJoin(false);
 
-		String[][] result = tableJoin.joinTables(0, 1);
+		String[][] result = tableJoin.joinTables(10, 3);
 		if (result != null) {
 			printTable(result);
 		}

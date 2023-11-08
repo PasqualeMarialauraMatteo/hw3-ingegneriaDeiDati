@@ -110,7 +110,7 @@ public class Utils {
 
     private static String[][] convertListToArray(List<String[]> list) {
         if (list == null || list.isEmpty()) {
-            return new String[0][0];
+            return null;
         }
 
         int numRows = list.size();

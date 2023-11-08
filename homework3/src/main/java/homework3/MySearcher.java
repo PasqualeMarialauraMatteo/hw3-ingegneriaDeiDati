@@ -6,15 +6,7 @@ import static homework3.utils.Constants.TABLE_COLUMN;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -32,6 +24,10 @@ public class MySearcher {
 
 	//metodo che data una query ritorna una mappa con le colonne ordinate in base agli hit
 	public static Map<String, Integer> searchQuery(String[] queryString) {
+		List<String> query = new ArrayList<>();
+		for(String value: queryString) {
+			query.addAll(Arrays.asList(value.split(" ")));
+		}
 		
 		//mappa che tiene conto di quanti hit abbiamo per colonna
 		Map<String, Integer> columnOccurrences = new HashMap<>();
@@ -45,7 +41,7 @@ public class MySearcher {
 			IndexReader reader = DirectoryReader.open(directory);
 			IndexSearcher searcher = new IndexSearcher(reader);
 			
-			for(String s : queryString) {
+			for(String s : query) {
 				
 				TermQuery termQuery = new TermQuery(new Term(CONTENT, s.toLowerCase()));
 				System.out.println(s);
