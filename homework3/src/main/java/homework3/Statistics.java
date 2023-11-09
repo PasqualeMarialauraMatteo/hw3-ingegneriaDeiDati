@@ -121,6 +121,7 @@ public class Statistics {
 					}
 					else {
 						colonnaToCella.put(column, new HashSet<String>());
+						colonnaToCella.get(column).add(cell);
 					}
 				}
 

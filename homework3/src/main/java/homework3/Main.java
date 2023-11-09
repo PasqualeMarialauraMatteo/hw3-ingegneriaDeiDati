@@ -1,20 +1,20 @@
 package homework3;
 
-import homework3.table.TableJoin;
+import java.io.FileOutputStream;
+import static homework3.utils.Constants.DATASET_PATH;
 import java.io.IOException;
-
-import static homework3.utils.Utils.printTable;
+import java.io.PrintStream;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		TableJoin tableJoin = new TableJoin(false);
+//		TableJoin tableJoin = new TableJoin(false);
+//
+//		String[][] result = tableJoin.joinTables(10, 3);
+//		if (result != null) {
+//			printTable(result);
+//		}
 
-		String[][] result = tableJoin.joinTables(10, 3);
-		if (result != null) {
-			printTable(result);
-		}
 
-		/*
 		//indicizzazione
 //		MyJsonParser mjp = new MyJsonParser(DATASET_PATH);
 //		mjp.index();
@@ -52,6 +52,6 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-		 */
+
 	}
 }
